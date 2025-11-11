@@ -3,9 +3,7 @@ package lu.uni.jakartaee.moviefy.jpa;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Named;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
@@ -13,16 +11,19 @@ import java.io.Serializable;
 @Entity(name="movie")
 public class Movie implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    private String director; // Will be changed to another entity class
+    @ManyToOne
+    private Director director;
     private String allActors; // One-to-many relationship afterwards
     private String genre;
     private int runtime;
     private int year;
     private String description;
     private String posterLocation;
+
+
 
     public void setId(Long id) {
         this.id = id;
