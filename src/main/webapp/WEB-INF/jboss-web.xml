@@ -6,5 +6,5 @@
                       "
   version="15.0">
 
-  <context-root>/REST-Example</context-root>
+  <context-root>/Exercise1</context-root>
 </jboss-web>

@@ -5,7 +5,7 @@
           https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
 
-    <persistence-unit name="JPA-Example"
+    <persistence-unit name="Exercise1"
                       transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/MariaDBDS</jta-data-source>
         <class>lu.uni.jakartaee.moviefy.jpa.Actor</class>
