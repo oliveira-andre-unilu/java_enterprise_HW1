@@ -18,6 +18,22 @@ public class SearchMovies implements Serializable {
     @PostConstruct
     public void init() {
         filtersAvailable = new HashMap<>();
-        filtersAvailable.put("all", "By Year");
+        filtersAvailable.put("By Year", "By Year");
+    }
+
+    public void setFiltersAvailable(Map<String, String> filtersAvailable) {
+        this.filtersAvailable = filtersAvailable;
+    }
+
+    public void setFilterBy(String filterBy) {
+        this.filterBy = filterBy;
+    }
+
+    public Map<String, String> getFiltersAvailable() {
+        return filtersAvailable;
+    }
+
+    public String getFilterBy() {
+        return filterBy;
     }
 }
