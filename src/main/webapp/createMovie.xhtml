@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets" xmlns:f="http://java.sun.com/jsf/core" xml:lang="en">
+<h:head>
+    <title>Moviefy-create a new movie</title>
+    <h:outputStylesheet library="css" name="default.css"/>
+</h:head>
+<h:body>
+    <div class="center-container">
+        <div class="content-box">
+            <h1>Create a new movie</h1>
+            <p>Please enter all the credentials</p>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="Title"/>
+                    <h:inputText
+                        value="#{createMovie.movieTitle}"
+                        styleClass="text-field"/>
+
+                    <h:outputText value="Director Name"/>
+                    <h:inputText
+                        value="#{createMovie.directorName}"
+                        styleClass="text-field"/>
+
+                    <h:outputText value="Main actor names"/>
+                    <h:inputText
+                        value="#{createMovie.actorNames}"
+                        styleClass="text-field"/>
+
+                    <h:outputText value="Genre"/>
+                    <h:inputText
+                        value="#{createMovie.genre}"
+                        styleClass="text-field"/>
+
+                    <h:outputText value="Runtime"/>
+                    <h:inputText
+                        value="#{createMovie.runTime}"
+                        validatorMessage="Runtime must be an non-decimal number"
+                        styleClass="text-field">
+                        <f:convertNumber/>
+                    </h:inputText>
+
+                    <h:outputText value="Year"/>
+                    <h:inputText
+                        value="#{createMovie.year}"
+                        validatorMessage="Year must be a non-decimal number"
+                        styleClass="text-field">
+                        <f:convertNumber/>
+                    </h:inputText>
+
+                    <h:outputText value="Plot in one sentence"/>
+                    <h:inputText
+                        value="#{createMovie.description}"
+                        styleClass="text-field"/>
+
+                    <h:outputText value="PosterLocation"/>
+                    <h:inputText
+                        value="#{createMovie.posterDescription}"
+                        styleClass="text-field"/>
+                </h:panelGrid>
+                <h:commandButton
+                        value="Create Movie"
+                        action="#{createMovie.createMovieAction()}"
+                        styleClass="primary-btn"/>
+            </h:form>
+            <h:messages/>
+        </div>
+    </div>
+</h:body>
+</html>

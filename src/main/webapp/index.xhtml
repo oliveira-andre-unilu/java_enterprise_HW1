@@ -12,8 +12,12 @@
     <div class="content-box">
       <h1>Moviefy by Andre Martins</h1>
       <h2>What would you like to do?</h2>
-      <h:button value="Create a new new movie" outcome="newMovie"/>
-      <h:button value="Search for a movie" outcome="SearchMovies"/>
+      <h:form>
+        <h:panelGrid columns="2">
+          <h:commandButton value="Create a new new movie" action="#{welcomeBean.createNewMovie}" styleClass="primary-btn"/>
+          <h:commandButton value="Search for a movie" action="#{welcomeBean.searchMovie}" styleClass="primary-btn"/>
+        </h:panelGrid>
+      </h:form>
     </div>
   </div>
 </h:body>

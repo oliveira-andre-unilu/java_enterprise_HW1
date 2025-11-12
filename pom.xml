@@ -93,5 +93,11 @@
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.2.Final</version>
         </dependency>
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>15.0.0</version>
+            <classifier>jakarta</classifier>
+        </dependency>
     </dependencies>
 </project>
