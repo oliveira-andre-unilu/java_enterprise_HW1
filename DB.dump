@@ -24,9 +24,10 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ `javaee` /*!40100 DEFAULT CHARACTER SET
 USE `javaee`;
 
 --
--- Table structure for table `movies`
+-- Table structure for table `movie`
 --
 
+DROP TABLE IF EXISTS `movie`;
 DROP TABLE IF EXISTS `movies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;

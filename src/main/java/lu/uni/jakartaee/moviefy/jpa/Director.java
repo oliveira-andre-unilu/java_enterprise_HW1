@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity(name="director")
+@NamedQuery(name = "Director.findAll", query = "SELECT d FROM director d")
 public class Director implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

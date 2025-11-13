@@ -1,6 +1,7 @@
 package lu.uni.jakartaee.moviefy.web.beans;
 
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lu.uni.jakartaee.moviefy.jpa.Movie;
 import lu.uni.jakartaee.moviefy.service.MovieService;
@@ -22,6 +23,7 @@ public class CreateMovie implements Serializable {
     private String creationStatus;
 
     //Business logic elements
+    @Inject
     private MovieService movieService;
 
     //Generic Constructor
@@ -33,12 +35,16 @@ public class CreateMovie implements Serializable {
     public String createMovieAction(){
         //Trying to fetch a Movie with existing data
         if(!isCreationPossible()){
-            return "All fields must be filled";
+            String message = "All fields must be filled";
+            this.creationStatus = message;
+            return message;
         }
         Movie movie = movieService.addMovie(this.movieTitle, this.directorName, this.actorNames, this.genre, this.runTime,
                 this.year, this.description, this.posterDescription);
         if(movie == null){
-            return "Movie creation failed";
+            String message = "There was an error creating the movie";
+            this.creationStatus = message;
+            return message;
         }
         this.creationStatus = "CREATED NEW MOVIE: " + movie.toString();
         return "Movie created successfully";
@@ -70,6 +76,14 @@ public class CreateMovie implements Serializable {
     //Getters and Setters
     public void setMovieTitle(String movieTitle) {
         this.movieTitle = movieTitle;
+    }
+
+    public String getCreationStatus() {
+        return creationStatus;
+    }
+
+    public void setCreationStatus(String creationStatus) {
+        this.creationStatus = creationStatus;
     }
 
     public void setDirectorName(String directorName) {

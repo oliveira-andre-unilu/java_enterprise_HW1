@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity(name="main_actor")
+@NamedQuery(name = "Actor.findAll", query = "SELECT a FROM main_actor a")
 public class Actor implements Serializable {
 
     @Id
@@ -21,13 +22,14 @@ public class Actor implements Serializable {
     )
     private List<Movie> movies;
 
-    // Getters and setters
-    public void setId(Long id) {
-        this.id = id;
+    //Constructors
+    public Actor(String name, List<Movie> movies) {
+        this.name = name;
+        this.movies = movies;
     }
 
-    public Long getId() {
-        return id;
+    public Actor() {
+
     }
 
     @Override
@@ -46,6 +48,16 @@ public class Actor implements Serializable {
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
+    //General functions
+    public boolean addMovie(Movie movie) {
+        if (this.movies.contains(movie)) {
+            return false;
+        }else{
+            this.movies.add(movie);
+            return true;
+        }
+    }
+
     //Getters and setters
 
     public String getName() {
@@ -62,5 +74,13 @@ public class Actor implements Serializable {
 
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }
