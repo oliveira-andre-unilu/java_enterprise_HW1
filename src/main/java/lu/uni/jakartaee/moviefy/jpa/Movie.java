@@ -7,8 +7,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Stateless
 @Entity(name="movie")
+@NamedQuery(name = "Movie.findAll", query = "SELECT m FROM movie m")
 public class Movie implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class Movie implements Serializable {
     private int runtime;
     private int year;
     private String description;
-    @JoinColumn(name = "poster_location")
+    @Column(name = "poster_location")
     private String posterLocation;
 
 
@@ -72,11 +72,77 @@ public class Movie implements Serializable {
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
+    // getters and setters
+
     public void setId(Long id) {
         this.id = id;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
+    public List<Actor> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public int getRuntime() {
+        return runtime;
+    }
+
+    public void setRuntime(int runtime) {
+        this.runtime = runtime;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPosterLocation() {
+        return posterLocation;
+    }
+
+    public void setPosterLocation(String posterLocation) {
+        this.posterLocation = posterLocation;
     }
 }

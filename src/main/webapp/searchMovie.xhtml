@@ -11,7 +11,7 @@
 </h:head>
 <h:body>
     <div class="center-container">
-        <div class="content-box">
+        <div class="content-box-search-page">
             <h1>Search for a specific movie</h1>
             <p:panel header="Select a filter" style="margin-bottom:10px">
                 <h:panelGrid columns="2" cellpadding="5">
@@ -20,8 +20,33 @@
                         <f:selectItem itemLabel="Select Variable" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{searchMovie.filtersAvailable}"/>
                     </p:selectOneMenu>
+                    <p:outputLabel value="Search:"/>
+                    <p:inputText value="#{searchMovie.searchTerm}" styleClass="text-field"/>
                 </h:panelGrid>
             </p:panel>
+            <div>
+                <p:dataTable var="movie" value="#{searchMovie.loadedMovies}">
+                    <p:column headerText="Title">
+                        <h:outputText value="#{movie.title}" />
+                    </p:column>
+
+                    <p:column headerText="Genre">
+                        <h:outputText value="#{movie.genre}" />
+                    </p:column>
+
+                    <p:column headerText="Runtime">
+                        <h:outputText value="#{movie.runtime}" />
+                    </p:column>
+
+                    <p:column headerText="Description">
+                        <h:outputText value="#{movie.description}" />
+                    </p:column>
+
+                    <p:column headerText="Poster Location">
+                        <h:outputText value="#{movie.posterLocation}" />
+                    </p:column>
+                </p:dataTable>
+            </div>
         </div>
     </div>
 </h:body>

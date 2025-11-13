@@ -39,4 +39,30 @@ public class Director implements Serializable {
         Director other = (Director) object;
         return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
+
+    // Getters and setters
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+    }
+
+    public int getBornYear() {
+        return BornYear;
+    }
+
+    public void setBornYear(int bornYear) {
+        BornYear = bornYear;
+    }
 }

@@ -3,6 +3,7 @@ package lu.uni.jakartaee.moviefy.service;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
@@ -18,14 +19,13 @@ import java.util.List;
 public class MovieService implements Serializable {
 
     //Needed attributes
-    private List<Movie> movies;//Cache of movies
 
     @PersistenceContext(unitName = "Exercise1")
     @Transient private EntityManager em;
 
     //Constructor
     public MovieService() {
-        movies = new ArrayList<Movie>();
+
     }
 
     //Overall methods
@@ -35,7 +35,6 @@ public class MovieService implements Serializable {
         Movie movie = new Movie(title, null, null, genre, runTime, year, description, posterLocation);
         try{
             em.merge(movie);
-            this.movies.add(movie);
             return movie;
         }catch(Exception e){
             return null;
@@ -44,8 +43,14 @@ public class MovieService implements Serializable {
 
     public List<Movie> getAllMovies() {
         //Currently method will always go to the database and read all the data from there
-        List<Movie> allmovies = em.createNamedQuery("Movie.findAll", Movie.class).getResultList();
-        return allmovies;
+        List<Movie> allmovies = new ArrayList<>();
+
+        allmovies = em.createNamedQuery("Movie.findAll", Movie.class).getResultList();
+        if(allmovies == null){
+            return new ArrayList<>();
+        }else{
+            return allmovies;
+        }
     }
 
 }
