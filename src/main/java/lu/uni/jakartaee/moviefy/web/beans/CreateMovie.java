@@ -7,6 +7,8 @@ import lu.uni.jakartaee.moviefy.jpa.Movie;
 import lu.uni.jakartaee.moviefy.service.MovieService;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @SessionScoped
 @Named("createMovie")
@@ -14,22 +16,21 @@ public class CreateMovie implements Serializable {
     //Attributes related to fields in the xhtml file
     private String movieTitle;
     private String directorName;
-    private String actorNames;
+    private String actorNames = "";
     private String genre;
     private int runTime;
     private int year;
     private String description;
     private String posterDescription;
     private String creationStatus;
+    private List<String> allActors = new ArrayList<>();
 
     //Business logic elements
     @Inject
     private MovieService movieService;
 
     //Generic Constructor
-    public CreateMovie() {
-        this.movieService = new MovieService();
-    }
+    public CreateMovie() {}
 
     //General actions
     public String createMovieAction(){
@@ -39,8 +40,15 @@ public class CreateMovie implements Serializable {
             this.creationStatus = message;
             return message;
         }
-        Movie movie = movieService.addMovie(this.movieTitle, this.directorName, this.actorNames, this.genre, this.runTime,
-                this.year, this.description, this.posterDescription);
+        Movie movie = null;
+        try{
+            movie = movieService.addMovie2(this.movieTitle, this.directorName, this.allActors, this.genre, this.runTime,
+                    this.year, this.description, this.posterDescription);
+        }catch(Exception e){
+            this.creationStatus = e.getMessage() + e.getClass().getName();
+            return creationStatus;
+        }
+
         if(movie == null){
             String message = "There was an error creating the movie";
             this.creationStatus = message;
@@ -58,7 +66,7 @@ public class CreateMovie implements Serializable {
         if(directorName.isEmpty()){
             return false;
         }
-        if(actorNames.isEmpty()){
+        if(allActors.isEmpty()){
             return false;
         }
         if(genre.isEmpty()){
@@ -144,5 +152,13 @@ public class CreateMovie implements Serializable {
 
     public String getPosterDescription() {
         return posterDescription;
+    }
+
+    public List<String> getAllActors() {
+        return allActors;
+    }
+
+    public void setAllActors(List<String> allActors) {
+        this.allActors = allActors;
     }
 }

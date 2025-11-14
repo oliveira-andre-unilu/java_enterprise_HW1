@@ -1,14 +1,18 @@
 package lu.uni.jakartaee.moviefy.service;
 
+import jakarta.ejb.EJB;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
+import lu.uni.jakartaee.moviefy.exeptions.ActorNotCreatedException;
+import lu.uni.jakartaee.moviefy.exeptions.DirectorNotCreatedException;
 import lu.uni.jakartaee.moviefy.jpa.Actor;
+import lu.uni.jakartaee.moviefy.jpa.Director;
 import lu.uni.jakartaee.moviefy.jpa.Movie;
 
 import java.io.Serializable;
@@ -16,17 +20,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Named("movieService")
-@SessionScoped
-@Transactional
+@Stateless
 public class MovieService implements Serializable {
 
     //Needed attributes
 
     @PersistenceContext(unitName = "Exercise1")
-    @Transient private EntityManager em;
+    private EntityManager emMovie;
 
     @Inject
     ActorService actorService;
+    @Inject
+    DirectorService directorService;
 
     //Constructor
     public MovieService() {
@@ -34,30 +39,52 @@ public class MovieService implements Serializable {
     }
 
     //Overall methods
-    public Movie addMovie(String title, String directorName, String actorNames,
-                          String genre, int runTime, int year, String description, String posterLocation) {
-        //Fetching information about the actors and director, not done at the moment
-            //Trying to find the actor and possibly create it
-        Actor actor = actorService.findActorByName(actorNames);
-        if(actor == null){
-            boolean creation = actorService.createActor(new Actor(actorNames, new ArrayList<>()));
-            if(!creation){
-                return null;
-            }
-        }
-            //Trying to find the director and possibly create it
-
-            //Creating movie
-        Movie movie = new Movie(title, null, null, genre, runTime, year, description, posterLocation);
+    public Movie addMovie(String title, String directorName, List<String> actorNames,
+                          String genre, int runTime, int year, String description, String posterLocation)
+                            throws ActorNotCreatedException, DirectorNotCreatedException {
+        //Fetching information about the actors and director
+        List<Actor> actors = this.findAndCreateActor(actorNames);
+        Director director = this.findAndCreateDirector(directorName);
+        //Creating movie
+        Movie movie = new Movie(title, director, actors, genre, runTime, year, description, posterLocation);
         try{
-            em.merge(movie);
+            emMovie.merge(movie);
         }catch(Exception e){
             return null;
         }
 
-            //Relinking the actor
-        actor.addMovie(movie);
-        actorService.updateActor(actor);
+        //Relink all actors
+        this.relinkAllActorsToMovie(actors, movie);
+
+        //Relinking the director
+        this.relinkDirectorToMovie(director, movie);
+        return movie;
+    }
+
+    public Movie addMovie2(String title, String directorName, List<String> actorNames,
+                          String genre, int runTime, int year, String description, String posterLocation) {
+
+        // Create Director entity (new or existing)
+        Director director = new Director(directorName, 2000); // default bornYear if unknown
+
+        // Create Actor entities
+        List<Actor> actors = new ArrayList<>();
+        for (String actorName : actorNames) {
+            actors.add(new Actor(actorName, new ArrayList<>()));
+        }
+
+        // Create movie
+        Movie movie = new Movie(title, director, actors, genre, runTime, year, description, posterLocation);
+
+        // Maintain bidirectional relationships
+        director.addMovie(movie);
+        for (Actor actor : actors) {
+            actor.addMovie(movie);
+        }
+
+        // Persist movie (cascades to director & actors)
+        emMovie.persist(movie);
+
         return movie;
     }
 
@@ -65,12 +92,60 @@ public class MovieService implements Serializable {
         //Currently method will always go to the database and read all the data from there
         List<Movie> allmovies = new ArrayList<>();
 
-        allmovies = em.createNamedQuery("Movie.findAll", Movie.class).getResultList();
+        allmovies = emMovie.createNamedQuery("Movie.findAll", Movie.class).getResultList();
         if(allmovies == null){
             return new ArrayList<>();
         }else{
             return allmovies;
         }
+    }
+
+    //Helper functions
+    private List<Actor> findAndCreateActor(List<String> actorNames) throws ActorNotCreatedException {
+        List<Actor> actors = new ArrayList<>();
+        for (String actorName : actorNames) {
+            Actor tempActor = actorService.findActorByName(actorName);
+            if(tempActor == null){
+                tempActor = new Actor(actorName, new ArrayList<>());
+                boolean creation = actorService.createActor(tempActor);
+                if(!creation){
+                    throw new ActorNotCreatedException("Could not create actor: " + actorName);
+                }
+                actors.add(tempActor);
+            }
+        }
+        return actors;
+        /*List<Actor> actors = new ArrayList<>();
+        actors.add(new Actor("DEBUGGING", new ArrayList<>()));
+        return actors;*/
+    }
+
+    private Director findAndCreateDirector(String directorName) throws DirectorNotCreatedException {
+        Director tempDirector = directorService.findDirectorByName(directorName);
+        if(tempDirector == null){
+            tempDirector = new Director(directorName, 2000);
+            boolean result = directorService.createDirector(tempDirector);
+            if(!result){
+                throw new DirectorNotCreatedException("Could not create director: " + directorName);
+            }
+        }
+        return tempDirector;
+    }
+
+    private boolean relinkAllActorsToMovie(List<Actor> actors, Movie movie) {
+        for(Actor actor : actors){
+            boolean added = actor.addMovie(movie);
+            if(!added){return false;}
+            actorService.updateActor(actor);
+        }
+        return true;
+    }
+
+    private boolean relinkDirectorToMovie(Director director, Movie movie) {
+        boolean added = director.addMovie(movie);
+        if(!added){return false;}
+        directorService.updateDirector(director);
+        return true;
     }
 
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:ui="jakarta.faces.facelets" xmlns:f="http://java.sun.com/jsf/core" xml:lang="en">
+      xmlns:ui="jakarta.faces.facelets" xmlns:f="http://java.sun.com/jsf/core" xml:lang="en" xmlns:p="primefaces">
 <h:head>
     <title>Moviefy-create a new movie</title>
     <h:outputStylesheet library="css" name="default.css"/>
@@ -25,9 +25,10 @@
                         styleClass="text-field"/>
 
                     <h:outputText value="Main actor names"/>
-                    <h:inputText
-                        value="#{createMovie.actorNames}"
-                        styleClass="text-field"/>
+                    <p:chips id="actors"
+                             value="#{createMovie.allActors}"
+                             placeholder="Add an actor name and press enter"
+                             />
 
                     <h:outputText value="Genre"/>
                     <h:inputText

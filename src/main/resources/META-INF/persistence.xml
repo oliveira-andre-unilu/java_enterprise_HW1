@@ -11,6 +11,6 @@
         <class>lu.uni.jakartaee.moviefy.jpa.Actor</class>
         <class>lu.uni.jakartaee.moviefy.jpa.Director</class>
         <class>lu.uni.jakartaee.moviefy.jpa.Movie</class>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
     </persistence-unit>
 </persistence>

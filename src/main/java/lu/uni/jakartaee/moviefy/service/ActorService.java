@@ -1,60 +1,58 @@
 package lu.uni.jakartaee.moviefy.service;
 
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.PersistenceContext;
 import lu.uni.jakartaee.moviefy.jpa.Actor;
 
-import javax.persistence.PersistenceContext;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
 
-@SessionScoped
-@Transactional
+@Stateless
 public class ActorService implements Serializable {
 
-    // Needed attributes
-
     @PersistenceContext(unitName = "Exercise1")
-    @Transient private EntityManager em;
+    private EntityManager emActor;
 
-    //Constructor
-    public ActorService() {}
-
-    //Overall methods
     public Actor findActorByName(String name) {
-        return em.find(Actor.class, name);
+        List<Actor> result = emActor.createQuery(
+                        "SELECT a FROM main_actor a WHERE a.name = :name", Actor.class)
+                .setParameter("name", name)
+                .getResultList();
+        return result.isEmpty() ? null : result.get(0);
     }
 
     public boolean createActor(Actor actor) {
-        try{
-            em.persist(actor);
+        try {
+            emActor.persist(actor);
             return true;
-        }catch(Exception e){
+        } catch(Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
 
     public boolean updateActor(Actor actor) {
-        try{
-            em.merge(actor);
+        try {
+            emActor.merge(actor);
             return true;
-        }catch(Exception e){
+        } catch(Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
 
     public boolean deleteActor(Actor actor) {
-        try{
-            em.remove(em.merge(actor));
+        try {
+            emActor.remove(emActor.merge(actor));
             return true;
-        }catch(Exception e){
+        } catch(Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
 
     public List<Actor> findAllActors() {
-        return em.createNamedQuery("Actor.findAll", Actor.class).getResultList();
+        return emActor.createNamedQuery("Actor.findAll", Actor.class).getResultList();
     }
 }

@@ -17,14 +17,18 @@ import java.util.Map;
 @Named("searchMovie")
 public class SearchMovies implements Serializable {
     //Attributes related to fields in the xhtml file
+
+    //Attributes related to the filtering
     private Map<String, String> filtersAvailable;
     private String filterBy;
     private String searchTerm;
+    private List<String> appliedFilters = new ArrayList<>();
 
     //Attributes related to the table
     private List<Movie> loadedMovies;
     @Inject
     private MovieService movieService;
+
 
     //Constructor
     public SearchMovies() {
@@ -35,12 +39,62 @@ public class SearchMovies implements Serializable {
     public void init() {
         //Adding filter options
         filtersAvailable = new HashMap<>();
-        filtersAvailable.put("By Year", "By Year");
+        filtersAvailable.put("By Year", "YEAR");
+        filtersAvailable.put("By Title", "TITLE");
+        filtersAvailable.put("By Genre", "GENRE");
+        filtersAvailable.put("By Director Name", "DIRECTOR");
 
         //Loading data table
         loadedMovies = new ArrayList<>();
         loadedMovies = movieService.getAllMovies();
-        loadedMovies.add(new Movie("Some film", null, null, "Comedy", 65, 2000, "TESTING", "https:blabla"));
+        // loadedMovies.add(new Movie("Some film", null, null, "Comedy", 65, 2000, "TESTING", "https:blabla"));
+    }
+
+    public String applyChange(){
+
+        List<Movie> filteredSet = new ArrayList<>();
+        switch (filterBy) {
+            case "YEAR" -> {
+                for (Movie movie : loadedMovies) {
+                    if (String.valueOf(movie.getYear()).contains(this.searchTerm)) {
+                        filteredSet.add(movie);
+                    }
+                }
+                this.appliedFilters.add("Filter by year: " + this.searchTerm);
+            }
+            case "TITLE" -> {
+                for (Movie movie : loadedMovies) {
+                    if (String.valueOf(movie.getTitle()).contains(this.searchTerm)) {
+                        filteredSet.add(movie);
+                    }
+                }
+                this.appliedFilters.add("Filter by title: " + this.searchTerm);
+            }
+            case "GENRE" -> {
+                for (Movie movie : loadedMovies) {
+                    if (String.valueOf(movie.getGenre()).contains(this.searchTerm)) {
+                        filteredSet.add(movie);
+                    }
+                }
+                this.appliedFilters.add("Filter by genre: " + this.searchTerm);
+            }
+            case "DIRECTOR" -> {
+                for (Movie movie : loadedMovies) {
+                    if (String.valueOf(movie.getDirector().getName()).contains(this.searchTerm)) {
+                        filteredSet.add(movie);
+                    }
+                }
+                this.appliedFilters.add("Filter by director: " + this.searchTerm);
+            }
+        }
+        setLoadedMovies(filteredSet);
+        return "Filtering successfully";
+    }
+
+    public String resetFiltering(){
+        this.appliedFilters.clear();
+        setLoadedMovies(movieService.getAllMovies());
+        return "Reset successfully";
     }
 
     // Getters and setters
@@ -75,5 +129,13 @@ public class SearchMovies implements Serializable {
 
     public void setLoadedMovies(List<Movie> loadedMovies) {
         this.loadedMovies = loadedMovies;
+    }
+
+    public List<String> getAppliedFilters() {
+        return appliedFilters;
+    }
+
+    public void setAppliedFilters(List<String> appliedFilters) {
+        this.appliedFilters = appliedFilters;
     }
 }

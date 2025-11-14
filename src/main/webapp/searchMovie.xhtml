@@ -12,41 +12,79 @@
 <h:body>
     <div class="center-container">
         <div class="content-box-search-page">
-            <h1>Search for a specific movie</h1>
-            <p:panel header="Select a filter" style="margin-bottom:10px">
-                <h:panelGrid columns="2" cellpadding="5">
-                    <p:outputLabel value="Variable to search"/>
-                    <p:selectOneMenu id="country" value="#{searchMovie.filterBy}" style="width:150px">
-                        <f:selectItem itemLabel="Select Variable" itemValue="" noSelectionOption="true"/>
-                        <f:selectItems value="#{searchMovie.filtersAvailable}"/>
-                    </p:selectOneMenu>
-                    <p:outputLabel value="Search:"/>
-                    <p:inputText value="#{searchMovie.searchTerm}" styleClass="text-field"/>
-                </h:panelGrid>
-            </p:panel>
-            <div>
-                <p:dataTable var="movie" value="#{searchMovie.loadedMovies}">
+            <h:form id = "mainForm">
+                <h1>Search for a specific movie</h1>
+                <p:panelGrid columns="2" columnClasses="leftCol,rightCol" style="width:100%">
+                    <p:panel header="Select a filter" style="margin-bottom:10px">
+                        <h:panelGrid columns="2" cellpadding="5">
+                            <p:outputLabel value="Variable to search"/>
+                            <p:selectOneMenu id="country" value="#{searchMovie.filterBy}" style="width:150px">
+                                <f:selectItem itemLabel="Select Variable" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{searchMovie.filtersAvailable}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="Search:"/>
+                            <p:inputText value="#{searchMovie.searchTerm}" styleClass="text-field"/>
+
+                            <p:commandButton value="Apply filtering"
+                                             update=":mainForm:movieTable :mainForm:appliedFilters"
+                                             action="#{searchMovie.applyChange()}"/>
+
+                            <p:commandButton value="Reset filtering"
+                                             update=":mainForm:movieTable :mainForm:appliedFilters"
+                                             action="#{searchMovie.resetFiltering()}"/>
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <p:panel header="Applied Filters" id="appliedFilters" style="margin-left:20px;">
+                        <ul>
+                            <ui:repeat value="#{searchMovie.appliedFilters}" var="filter">
+                                <li>#{filter}</li>
+                            </ui:repeat>
+                        </ul>
+                    </p:panel>
+                </p:panelGrid>
+                <div>
+                <p:dataTable id="movieTable" var="movie" value="#{searchMovie.loadedMovies}">
                     <p:column headerText="Title">
                         <h:outputText value="#{movie.title}" />
                     </p:column>
 
-                    <p:column headerText="Genre">
-                        <h:outputText value="#{movie.genre}" />
-                    </p:column>
+                        <p:column headerText="Director">
+                            <h:outputText value="#{movie.director.name} (#{movie.director.bornYear})"/>
+                        </p:column>
 
-                    <p:column headerText="Runtime">
-                        <h:outputText value="#{movie.runtime}" />
-                    </p:column>
+                        <p:column headerText="Actors">
+                            <ui:repeat value="#{movie.actors}" var="actor">
+                                <h:outputText value="#{actor.name}" />
+                                <br/>
+                            </ui:repeat>
+                        </p:column>
 
-                    <p:column headerText="Description">
-                        <h:outputText value="#{movie.description}" />
-                    </p:column>
+                        <p:column headerText="Genre">
+                            <h:outputText value="#{movie.genre}" />
+                        </p:column>
 
-                    <p:column headerText="Poster Location">
-                        <h:outputText value="#{movie.posterLocation}" />
-                    </p:column>
-                </p:dataTable>
-            </div>
+                        <p:column headerText="Runtime">
+                            <h:outputText value="#{movie.runtime}" />
+                        </p:column>
+
+                        <p:column headerText="Year">
+                            <h:outputText value="#{movie.year}"/>
+                        </p:column>
+
+                        <p:column headerText="Description">
+                            <h:outputText value="#{movie.description}">
+                                <p:tooltip value="#{movie.description}"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Poster Location">
+                            <h:outputText value="#{movie.posterLocation}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
         </div>
     </div>
 </h:body>

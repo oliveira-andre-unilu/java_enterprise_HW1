@@ -14,7 +14,7 @@ public class Actor implements Serializable {
     private Long id;
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "movie_actor_relation",
             joinColumns = @JoinColumn(name = "actor_id", referencedColumnName = "id"),
