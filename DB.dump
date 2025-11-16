@@ -136,11 +136,11 @@ CREATE TABLE `movie` (
 LOCK TABLES `movie` WRITE;
 /*!40000 ALTER TABLE `movie` DISABLE KEYS */;
 INSERT INTO `movie` VALUES
-(1,'Inception',1,'Sci-Fi',148,2010,'A thief who steals corporate secrets through dream-sharing technology is tasked with planting an idea into the mind of a CEO.','/images/inception.jpg'),
-(2,'Pulp Fiction',3,'Crime',154,1994,'The lives of two hitmen, a boxer, and others intertwine in tales of violence and redemption.','/images/pulpfiction.jpg'),
-(3,'Oppenheimer',1,'Biography',180,2023,'The story of J. Robert Oppenheimer and the development of the atomic bomb.','/images/oppenheimer.jpg'),
-(4,'Barbie',4,'Comedy',114,2023,'Barbie suffers a crisis that leads her to question her world and her existence.','/images/barbie.jpg'),
-(5,'The Irishman',5,'Drama',209,2019,'A mob hitman recalls his involvement in the disappearance of union leader Jimmy Hoffa.','/images/irishman.jpg');
+(1,'Inception',1,'Sci-Fi',148,2010,'A thief who steals corporate secrets through dream-sharing technology is tasked with planting an idea into the mind of a CEO.','https://m.media-amazon.com/images/I/51oD7vJtYhL._AC_.jpg'),
+(2,'Pulp Fiction',3,'Crime',154,1994,'The lives of two hitmen, a boxer, and others intertwine in tales of violence and redemption.','https://m.media-amazon.com/images/I/71c05lTE03L._AC_SY679_.jpg'),
+(3,'Oppenheimer',1,'Biography',180,2023,'The story of J. Robert Oppenheimer and the development of the atomic bomb.','https://m.media-amazon.com/images/I/81XkU5rc9zL._AC_SY679_.jpg'),
+(4,'Barbie',4,'Comedy',114,2023,'Barbie suffers a crisis that leads her to question her world and her existence.','https://m.media-amazon.com/images/I/71cw9p2TtEL._AC_SY679_.jpg'),
+(5,'The Irishman',5,'Drama',209,2019,'A mob hitman recalls his involvement in the disappearance of union leader Jimmy Hoffa.','https://m.media-amazon.com/images/I/71k0bqFgqgL._AC_SY679_.jpg');
 /*!40000 ALTER TABLE `movie` ENABLE KEYS */;
 UNLOCK TABLES;
 

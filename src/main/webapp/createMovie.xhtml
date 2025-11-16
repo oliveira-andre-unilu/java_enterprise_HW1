@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html"
-      xmlns:ui="jakarta.faces.facelets" xmlns:f="http://java.sun.com/jsf/core" xml:lang="en" xmlns:p="primefaces">
+      xmlns:ui="jakarta.faces.facelets" xmlns:f="jakarta.faces.core" xml:lang="en" xmlns:p="primefaces">
 <h:head>
     <title>Moviefy-create a new movie</title>
     <h:outputStylesheet library="css" name="default.css"/>
@@ -12,59 +12,106 @@
         <div class="content-box">
             <h1>Create a new movie</h1>
             <p>Please enter all the credentials</p>
-            <h:form>
-                <h:panelGrid columns="2">
-                    <h:outputText value="Title"/>
-                    <h:inputText
-                        value="#{createMovie.movieTitle}"
-                        styleClass="text-field"/>
+            <h:form id="mainForm">
+                <p:tabView id="addMovieTab" widgetVar="movieTabs">
+                    <p:tab title="Manually add a new movie">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Title"/>
+                            <h:inputText
+                                    value="#{createMovie.movieTitle}"
+                                    styleClass="text-field"/>
 
-                    <h:outputText value="Director Name"/>
-                    <h:inputText
-                        value="#{createMovie.directorName}"
-                        styleClass="text-field"/>
+                            <h:outputText value="Director Name"/>
+                            <h:inputText
+                                    value="#{createMovie.directorName}"
+                                    styleClass="text-field"/>
 
-                    <h:outputText value="Main actor names"/>
-                    <p:chips id="actors"
-                             value="#{createMovie.allActors}"
-                             placeholder="Add an actor name and press enter"
-                             />
+                            <h:outputText value="Main actor names"/>
+                            <p:chips id="actors"
+                                     value="#{createMovie.allActors}"
+                                     placeholder="Add an actor name and press enter"
+                            />
 
-                    <h:outputText value="Genre"/>
-                    <h:inputText
-                        value="#{createMovie.genre}"
-                        styleClass="text-field"/>
+                            <h:outputText value="Genre"/>
+                            <h:inputText
+                                    value="#{createMovie.genre}"
+                                    styleClass="text-field"/>
 
-                    <h:outputText value="Runtime"/>
-                    <h:inputText
-                        value="#{createMovie.runTime}"
-                        validatorMessage="Runtime must be an non-decimal number"
-                        styleClass="text-field">
-                        <f:convertNumber/>
-                    </h:inputText>
+                            <h:outputText value="Runtime"/>
+                            <h:inputText
+                                    value="#{createMovie.runTime}"
+                                    validatorMessage="Runtime must be an non-decimal number"
+                                    styleClass="text-field">
+                                <f:convertNumber/>
+                            </h:inputText>
 
-                    <h:outputText value="Year"/>
-                    <h:inputText
-                        value="#{createMovie.year}"
-                        validatorMessage="Year must be a non-decimal number"
-                        styleClass="text-field">
-                        <f:convertNumber/>
-                    </h:inputText>
+                            <h:outputText value="Year"/>
+                            <h:inputText
+                                    value="#{createMovie.year}"
+                                    validatorMessage="Year must be a non-decimal number"
+                                    styleClass="text-field">
+                                <f:convertNumber/>
+                            </h:inputText>
 
-                    <h:outputText value="Plot in one sentence"/>
-                    <h:inputText
-                        value="#{createMovie.description}"
-                        styleClass="text-field"/>
+                            <h:outputText value="Plot in one sentence"/>
+                            <h:inputText
+                                    value="#{createMovie.description}"
+                                    styleClass="text-field"/>
 
-                    <h:outputText value="PosterLocation"/>
-                    <h:inputText
-                        value="#{createMovie.posterDescription}"
-                        styleClass="text-field"/>
-                </h:panelGrid>
-                <h:commandButton
-                        value="Create Movie"
-                        action="#{createMovie.createMovieAction()}"
-                        styleClass="primary-btn"/>
+                            <h:outputText value="PosterLocation"/>
+                            <h:inputText
+                                    value="#{createMovie.posterDescription}"
+                                    styleClass="text-field"/>
+                        </h:panelGrid>
+                        <h:commandButton
+                                value="Create Movie"
+                                action="#{createMovie.createMovieAction()}"
+                                styleClass="primary-btn"/>
+                    </p:tab>
+                    <p:tab title="API film insertion">
+                        <p:panelGrid columns="2">
+                            <h:outputText value="Title of the movie"/>
+                            <h:inputText
+                                    value="#{createMovieAPI.movieTitle}"
+                                    styleClass="text-field"/>
+
+                            <h:outputText value="Movie type (optional):"/>
+                            <p:selectOneMenu id="MovieType" value="#{createMovieAPI.movieType}">
+                                <f:selectItem itemLabel="Any" itemValue="Any" noSelectionOption="true"/>
+                                <f:selectItems value="#{createMovieAPI.movieTypes}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputText value="Release year (optional):"/>
+                            <h:inputText value="#{createMovieAPI.releaseDate}"
+                                         validatorMessage="Release year be an non-decimal number"
+                                         styleClass="text-field">
+                                <f:convertNumber/>
+                            </h:inputText>
+
+                            <p:dialog widgetVar="resultDialog" modal="true" header="Result">
+                                <h:panelGroup id="resultDialog">
+                                    <h:outputText id="resultMessage" value="#{createMovieAPI.creationStatus}"/>
+                                    <br/><br/>
+                                    <h:panelGrid columns="2">
+                                        <p:commandButton value="Add Movie to list"
+                                                         rendered="#{createMovieAPI.success}"
+                                                         action="#{createMovieAPI.saveTempMovie()}"
+                                                         onclick="PF('resultDialog').hide();"/>
+                                        <p:commandButton value="Go back"
+                                                         onclick="PF('resulDialog').hide();"/>
+                                    </h:panelGrid>
+                                </h:panelGroup>
+                            </p:dialog>
+
+                            <p:commandButton value="Search for movie"
+                                             action="#{createMovieAPI.applyChange()}"
+                                             update=":mainForm:addMovieTab:resultDialog"
+                                             oncomplete="PF('resultDialog').show();"
+                                             ajax="true">
+                            </p:commandButton>
+                        </p:panelGrid>
+                    </p:tab>
+                </p:tabView>
             </h:form>
             <h:messages/>
             <h:outputText value="#{createMovie.creationStatus}"/>

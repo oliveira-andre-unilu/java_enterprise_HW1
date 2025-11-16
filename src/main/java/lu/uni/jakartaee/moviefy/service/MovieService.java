@@ -64,23 +64,34 @@ public class MovieService implements Serializable {
     public Movie addMovie2(String title, String directorName, List<String> actorNames,
                           String genre, int runTime, int year, String description, String posterLocation) {
 
-        // Create Director entity (new or existing)
-        Director director = new Director(directorName, 2000); // default bornYear if unknown
-
-        // Create Actor entities
-        List<Actor> actors = new ArrayList<>();
-        for (String actorName : actorNames) {
-            actors.add(new Actor(actorName, new ArrayList<>()));
+//        // Create Director entity (new or existing)
+//        Director director = new Director(directorName, 2000);
+//
+//        // Create Actor entities
+//        List<Actor> actors = new ArrayList<>();
+//        for (String actorName : actorNames) {
+//            actors.add(new Actor(actorName, new ArrayList<>()));
+//        }
+        Director director = null;
+        List<Actor> actors = null;
+        try {
+            director = findAndCreateDirector(directorName);
+            actors = findAndCreateActor(actorNames);
+        } catch (DirectorNotCreatedException e) {
+            return null;
+        } catch (ActorNotCreatedException e) {
+            return null;
         }
+
 
         // Create movie
         Movie movie = new Movie(title, director, actors, genre, runTime, year, description, posterLocation);
 
         // Maintain bidirectional relationships
-        director.addMovie(movie);
-        for (Actor actor : actors) {
-            actor.addMovie(movie);
-        }
+        //director.addMovie(movie);
+        //for (Actor actor : actors) {
+        //    actor.addMovie(movie);
+        //}
 
         // Persist movie (cascades to director & actors)
         emMovie.persist(movie);
