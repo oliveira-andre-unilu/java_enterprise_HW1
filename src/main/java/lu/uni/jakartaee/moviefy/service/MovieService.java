@@ -1,14 +1,10 @@
 package lu.uni.jakartaee.moviefy.service;
 
-import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Transient;
-import jakarta.transaction.Transactional;
 import lu.uni.jakartaee.moviefy.exeptions.ActorNotCreatedException;
 import lu.uni.jakartaee.moviefy.exeptions.DirectorNotCreatedException;
 import lu.uni.jakartaee.moviefy.jpa.Actor;
@@ -40,58 +36,19 @@ public class MovieService implements Serializable {
 
     //Overall methods
     public Movie addMovie(String title, String directorName, List<String> actorNames,
-                          String genre, int runTime, int year, String description, String posterLocation)
-                            throws ActorNotCreatedException, DirectorNotCreatedException {
-        //Fetching information about the actors and director
-        List<Actor> actors = this.findAndCreateActor(actorNames);
-        Director director = this.findAndCreateDirector(directorName);
-        //Creating movie
-        Movie movie = new Movie(title, director, actors, genre, runTime, year, description, posterLocation);
-        try{
-            emMovie.merge(movie);
-        }catch(Exception e){
-            return null;
-        }
-
-        //Relink all actors
-        this.relinkAllActorsToMovie(actors, movie);
-
-        //Relinking the director
-        this.relinkDirectorToMovie(director, movie);
-        return movie;
-    }
-
-    public Movie addMovie2(String title, String directorName, List<String> actorNames,
                           String genre, int runTime, int year, String description, String posterLocation) {
-
-//        // Create Director entity (new or existing)
-//        Director director = new Director(directorName, 2000);
-//
-//        // Create Actor entities
-//        List<Actor> actors = new ArrayList<>();
-//        for (String actorName : actorNames) {
-//            actors.add(new Actor(actorName, new ArrayList<>()));
-//        }
-        Director director = null;
-        List<Actor> actors = null;
+        Director director;
+        List<Actor> actors;
         try {
             director = findAndCreateDirector(directorName);
             actors = findAndCreateActor(actorNames);
-        } catch (DirectorNotCreatedException e) {
-            return null;
-        } catch (ActorNotCreatedException e) {
+        } catch (DirectorNotCreatedException | ActorNotCreatedException e) {
             return null;
         }
 
 
         // Create movie
         Movie movie = new Movie(title, director, actors, genre, runTime, year, description, posterLocation);
-
-        // Maintain bidirectional relationships
-        //director.addMovie(movie);
-        //for (Actor actor : actors) {
-        //    actor.addMovie(movie);
-        //}
 
         // Persist movie (cascades to director & actors)
         emMovie.persist(movie);
@@ -126,9 +83,6 @@ public class MovieService implements Serializable {
             }
         }
         return actors;
-        /*List<Actor> actors = new ArrayList<>();
-        actors.add(new Actor("DEBUGGING", new ArrayList<>()));
-        return actors;*/
     }
 
     private Director findAndCreateDirector(String directorName) throws DirectorNotCreatedException {

@@ -7,10 +7,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lu.uni.jakartaee.moviefy.api.MovieDTO;
 import lu.uni.jakartaee.moviefy.exeptions.APICallNotSuccessful;
-import lu.uni.jakartaee.moviefy.exeptions.ActorNotCreatedException;
-import lu.uni.jakartaee.moviefy.exeptions.DirectorNotCreatedException;
-import lu.uni.jakartaee.moviefy.jpa.Actor;
-import lu.uni.jakartaee.moviefy.jpa.Director;
 import lu.uni.jakartaee.moviefy.jpa.Movie;
 
 import java.io.IOException;
@@ -21,7 +17,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +80,7 @@ public class MovieAPIService implements Serializable {
             runTime = Integer.parseInt(dto.getRuntime().split(" ")[0]);
         } catch (Exception ignored) {}
 
-        return movieService.addMovie2(
+        return movieService.addMovie(
                 dto.getTitle(),
                 dto.getDirector(),
                 actors,

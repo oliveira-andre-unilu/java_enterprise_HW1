@@ -115,6 +115,12 @@
             </h:form>
             <h:messages/>
             <h:outputText value="#{createMovie.creationStatus}"/>
+            <h:form>
+                <h:panelGrid columns="2" styleClass="content-box-button">
+                    <h:commandButton value="Back to main page" action="#{navigationBean.goToHomePage()}"/>
+                    <h:commandButton value="Search for a film" action="#{navigationBean.goToMovieListPage()}"/>
+                </h:panelGrid>
+            </h:form>
         </div>
     </div>
 </h:body>

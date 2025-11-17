@@ -45,45 +45,69 @@
                     </p:panel>
                 </p:panelGrid>
                 <div>
-                <p:dataTable id="movieTable" var="movie" value="#{searchMovie.loadedMovies}">
-                    <p:column headerText="Title">
-                        <h:outputText value="#{movie.title}" />
-                    </p:column>
+                    <p:dataTable id="movieTable" var="movie" value="#{searchMovie.loadedMovies}"
+                                 widgetVar="movieTable" multiViewState="true" rows="10" paginator="true"
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15" selectionMode="single" rowKey="#{movie.id}"
+                                 selection="#{searchMovie.selectedMovie}"
+                                 emptyMessage="No movies found with the given criterias">
 
-                        <p:column headerText="Director">
-                            <h:outputText value="#{movie.director.name} (#{movie.director.bornYear})"/>
-                        </p:column>
+                        <p:ajax event="rowSelect" update=":mainForm:movieDetails" oncomplete="PF('movieDialog').show()"/>
 
-                        <p:column headerText="Actors">
-                            <ui:repeat value="#{movie.actors}" var="actor">
-                                <h:outputText value="#{actor.name}" />
-                                <br/>
-                            </ui:repeat>
-                        </p:column>
-
-                        <p:column headerText="Genre">
-                            <h:outputText value="#{movie.genre}" />
-                        </p:column>
-
-                        <p:column headerText="Runtime">
-                            <h:outputText value="#{movie.runtime}" />
+                        <p:column headerText="Title">
+                            <h:outputText value="#{movie.title}" />
                         </p:column>
 
                         <p:column headerText="Year">
                             <h:outputText value="#{movie.year}"/>
                         </p:column>
-
-                        <p:column headerText="Description">
-                            <h:outputText value="#{movie.description}">
-                                <p:tooltip value="#{movie.description}"/>
-                            </h:outputText>
-                        </p:column>
-
-                        <p:column headerText="Poster Location">
-                            <h:outputText value="#{movie.posterLocation}" />
-                        </p:column>
                     </p:dataTable>
                 </div>
+
+                <p:dialog header="Movie info" widgetVar="movieDialog" modal="true" showEffect="fade" hideEffect="fade">
+                    <p:outputPanel id="movieDetails" style="text-align:center; line-height:1.5;">
+
+                        <h2 style="margin-bottom:10px;">#{searchMovie.selectedMovie.title}</h2>
+
+                        <p:graphicImage value="#{searchMovie.selectedMovie.posterLocation}"
+                                        style="width:250px; margin-bottom:10px;" />
+
+                        <p>
+                            <strong>Director:</strong>
+                            #{searchMovie.selectedMovie.director.name}
+                            (#{searchMovie.selectedMovie.director.bornYear})
+                        </p>
+
+                        <p>
+                            <strong>Actors:</strong>
+                        </p>
+
+                        <ul style="list-style: none; padding:0; margin:0 0 10px 0;">
+                            <ui:repeat value="#{searchMovie.selectedMovie.actors}" var="actor">
+                                <li>• #{actor.name}</li>
+                            </ui:repeat>
+                        </ul>
+
+                        <p><strong>Genre:</strong> #{searchMovie.selectedMovie.genre}</p>
+
+                        <p><strong>Runtime:</strong> #{searchMovie.selectedMovie.runtime} min</p>
+
+                        <p><strong>Year:</strong> #{searchMovie.selectedMovie.year}</p>
+
+                        <p style="margin-top:10px;">
+                            <strong>Description:</strong><br/>
+                            <h:outputText value="#{searchMovie.selectedMovie.description}" />
+                        </p>
+
+                    </p:outputPanel>
+
+                </p:dialog>
+            </h:form>
+            <h:form>
+                <h:panelGrid columns="2" styleClass="content-box-button">
+                    <h:commandButton value="Back to main page" action="#{navigationBean.goToHomePage()}"/>
+                    <h:commandButton value="Create a new film" action="#{navigationBean.goToCreateMoviePage()}"/>
+                </h:panelGrid>
             </h:form>
         </div>
     </div>

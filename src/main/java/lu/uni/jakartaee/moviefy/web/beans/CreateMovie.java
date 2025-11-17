@@ -42,7 +42,7 @@ public class CreateMovie implements Serializable {
         }
         Movie movie = null;
         try{
-            movie = movieService.addMovie2(this.movieTitle, this.directorName, this.allActors, this.genre, this.runTime,
+            movie = movieService.addMovie(this.movieTitle, this.directorName, this.allActors, this.genre, this.runTime,
                     this.year, this.description, this.posterDescription);
         }catch(Exception e){
             this.creationStatus = e.getMessage() + e.getClass().getName();

@@ -26,6 +26,9 @@ public class SearchMovies implements Serializable {
 
     //Attributes related to the table
     private List<Movie> loadedMovies;
+    private Movie selectedMovie;
+
+    //Dependencies
     @Inject
     private MovieService movieService;
 
@@ -137,5 +140,13 @@ public class SearchMovies implements Serializable {
 
     public void setAppliedFilters(List<String> appliedFilters) {
         this.appliedFilters = appliedFilters;
+    }
+
+    public Movie getSelectedMovie() {
+        return selectedMovie;
+    }
+
+    public void setSelectedMovie(Movie selectedMovie) {
+        this.selectedMovie = selectedMovie;
     }
 }

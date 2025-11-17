@@ -14,7 +14,35 @@
         <from-view-id>/index.xhtml</from-view-id>
         <navigation-case>
             <from-outcome>searchMoviePage</from-outcome>
-            <to-view-id>/searchMovie.xhtml</to-view-id>
+            <to-view-id>/searchMovie2.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/createMovie.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>HOME</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/createMovie.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>MOVIE LIST</from-outcome>
+            <to-view-id>/searchMovie2.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/searchMovie2.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>HOME</from-outcome>
+            <to-view-id>/index.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>/searchMovie2.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>CREATE MOVIE</from-outcome>
+            <to-view-id>/createMovie.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>
