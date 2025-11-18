@@ -2,6 +2,7 @@ package lu.uni.jakartaee.moviefy.web.beans;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lu.uni.jakartaee.moviefy.jpa.Movie;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SessionScoped
+@ViewScoped
 @Named("searchMovie")
 public class SearchMovies implements Serializable {
     //Attributes related to fields in the xhtml file

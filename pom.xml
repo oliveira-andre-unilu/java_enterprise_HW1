@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>lu.uni.jakartaee.rest</groupId>
-    <artifactId>REST-Example</artifactId>
+    <artifactId>Exercise1</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>
 
-    <name>REST-Example</name>
+    <name>Exercise1</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

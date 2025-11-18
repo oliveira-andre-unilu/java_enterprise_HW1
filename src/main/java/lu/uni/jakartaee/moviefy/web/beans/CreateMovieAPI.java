@@ -65,7 +65,7 @@ public class CreateMovieAPI implements Serializable {
             return "UNKNOWN";
         } else {
             success = true;
-            creationStatus = "Success, would you like to save the film " + tempMovie.getTitle() + "to your library?";
+            creationStatus = "Success, would you like to save the film " + tempMovie.getTitle() + " to your library?";
             openDialog = true;
             return "SUCCESS";
         }
