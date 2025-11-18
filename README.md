@@ -32,5 +32,5 @@ Once the application is running, you can now access the application via `<your-w
 
 ## External links
 
-- **Demo screencast:** ![link](https://youtu.be/6lnZssJtII0)
-- **Github repository:** ![link](https://github.com/oliveira-andre-unilu/java_enterprise_HW1.git)
+- **Demo screencast:** [link](https://youtu.be/6lnZssJtII0)
+- **Github repository:** [link](https://github.com/oliveira-andre-unilu/java_enterprise_HW1.git)
